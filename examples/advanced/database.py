@@ -47,7 +47,7 @@ class User(BaseModel):
     full_name: Optional[str] = None
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Create tables
@@ -83,7 +83,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     
     # Create new user
-    db_user = UserDB(**user.dict())
+    db_user = UserDB(**user.model_dump())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -134,7 +134,7 @@ def update_user(user_id: int, user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     
     # Update user fields
-    for key, value in user.dict().items():
+    for key, value in user.model_dump().items():
         setattr(db_user, key, value)
     
     db.commit()

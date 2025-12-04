@@ -6,7 +6,7 @@ Run with: uvicorn examples.advanced.background_tasks:app --reload
 """
 
 from fastapi import FastAPI, BackgroundTasks
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 import time
 
 app = FastAPI(title="Background Tasks API")
@@ -111,7 +111,7 @@ async def create_order(order: Order, background_tasks: BackgroundTasks):
         order.customer_email,
         f"Order {order.order_id} confirmed: {order.quantity}x {order.item}"
     )
-    background_tasks.add_task(process_data, order.dict())
+    background_tasks.add_task(process_data, order.model_dump())
     
     return {
         "message": "Order created successfully",

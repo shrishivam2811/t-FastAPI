@@ -6,7 +6,7 @@ Run with: uvicorn examples.basic.request_body:app --reload
 """
 
 from fastapi import FastAPI, Body
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field
 from typing import Optional
 
 app = FastAPI(title="Request Body API")
@@ -54,7 +54,7 @@ def create_item(item: Item):
     Args:
         item: The item to create
     """
-    item_dict = item.dict()
+    item_dict = item.model_dump()
     if item.tax:
         price_with_tax = item.price + item.tax
         item_dict.update({"price_with_tax": price_with_tax})
@@ -76,7 +76,7 @@ def update_item(item_id: int, item: Item):
     return {
         "message": f"Item {item_id} updated successfully",
         "item_id": item_id,
-        "item": item.dict()
+        "item": item.model_dump()
     }
 
 
@@ -90,7 +90,7 @@ def create_user(user: User):
     """
     return {
         "message": "User created successfully",
-        "user": user.dict()
+        "user": user.model_dump()
     }
 
 
@@ -104,7 +104,7 @@ def create_product(product: Product):
     """
     return {
         "message": "Product created successfully",
-        "product": product.dict(),
+        "product": product.model_dump(),
         "total_value": product.price * product.quantity
     }
 
@@ -127,7 +127,7 @@ def update_item_details(
     """
     result = {
         "item_id": item_id,
-        "item": item.dict(),
+        "item": item.model_dump(),
         "importance": importance
     }
     if q:

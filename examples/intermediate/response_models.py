@@ -80,7 +80,7 @@ def create_user(user: UserIn):
         UserOut: User data without password
     """
     hashed_password = fake_password_hasher(user.password)
-    user_in_db = UserInDB(**user.dict(), hashed_password=hashed_password)
+    user_in_db = UserInDB(**user.model_dump(), hashed_password=hashed_password)
     fake_users_db[user.username] = user_in_db
     return user_in_db
 

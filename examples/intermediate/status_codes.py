@@ -81,7 +81,7 @@ def update_item(item_id: int, item: Item):
     else:
         items_db[item_id] = item
         return Response(
-            content=f'{{"id": {item_id}, "item": {item.json()}, "message": "Item created"}}',
+            content=f'{{"id": {item_id}, "item": {item.model_dump_json()}, "message": "Item created"}}',
             status_code=status.HTTP_201_CREATED,
             media_type="application/json"
         )
